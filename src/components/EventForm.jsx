@@ -3,48 +3,53 @@ import axios from 'axios';
 
 const EventForm = ({ onEventAdd }) => {
 
-  const [newEvent, setNewEvent] =
-		useState({ title: '', date: '', reminder: false });
+  const[title,setTitle] = useState("");
+  const[date,setDate] = useState("");
+  
 
-    const handleInputChange = (e) => {
-      setNewEvent(
-        {
-          ...newEvent,
-          [e.target.name]: e.target.value
-        }
-      );
-    };
+
     const handleSubmit = (e) => {
       e.preventDefault();
   
       // Create a new event
-      axios.post('http://localhost:3000/api/events', newEvent)
+      axios.post('http://localhost:3000/api/events',
+        {
+          title,
+          date
+          
+
+      })
         .then(response => {
           onEventAdd(response.data);
-          setNewEvent({ title: '', date: '', reminder: false });
+          setTitle("");
+          setDate("");
+          
+          window.location.reload();
         })
         .catch(error => console.error(error));
     };
 
   return (
-    <div className="flex justify-center my-10">
+    <div className="flex my-10 mx-10 px-10">
       
     
-      <div className="card card-border bg-blue-500 w-96 m-5">
+      <div className="card card-border bg-sky-950 w-90 m-5">
   <div className="card-body">
-    <h2 className="card-title">Event management App</h2>
+    <h2 className="card-title justify-center">Add New Events</h2>
 
     <fieldset className="fieldset">
-  <legend className="fieldset-legend">Title</legend>
-  <input type="text" className="input" placeholder="Type here" value={newEvent.title} onChange={handleInputChange} required />
+  <legend className="fieldset-legend">Enter Event Title</legend>
+  <input type="text" className="input" placeholder="Type here" value={title} onChange={(e)=>setTitle(e.target.value)}  />
 
-  <legend className="fieldset-legend">Enter Date</legend>
-  <input type="date" className="input" value={newEvent.date} onChange={handleInputChange} required />
+  <legend className="fieldset-legend">Enter Event Date and Time</legend>
+  <input type="datetime-local" className="input" value={date} onChange={(e)=>setDate(e.target.value)}  />
+
+  
  
 </fieldset>
     
     <div className="card-actions ">
-      <button className="btn bg-pink-500 w-80 mt-2" onSubmit={handleSubmit}>Add Event</button>
+      <button className="btn bg-pink-500 w-80 mt-5" onClick={handleSubmit}>Add Event</button>
     </div>
   </div>
 </div>
