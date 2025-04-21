@@ -49,7 +49,7 @@ const handleEventAdd = (newEvent) => {
     
 
       <div className='flex'>
-        <EventForm onEventAdd={handleEventAdd} />
+      
 
         
 
