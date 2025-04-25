@@ -1,87 +1,74 @@
-import React, { useState, useEffect } from 'react';
-
+import React, {useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { addEvents } from "../utils/eventSlice";
 import axios from 'axios';
-import EventForm from './EventForm';
-
-
 
 const EventList = () => {
 
-  const [events, setEvents] = useState([]);
+  const events = useSelector((store) => store.events);
+  const dispatch = useDispatch();
+
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get("http://localhost:3000/events",{
+        withCredentials: true,
+      });
+      dispatch(addEvents(res.data));
+
+    }catch (err) {
+      // Handle Error Case
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/events')
-      .then(response => setEvents(response.data))
-      .catch(error => console.error(error));
+
+    fetchEvents();
   }, []);
 
-  const handleEventDelete = (id) => {
-		console.log("delete event " + id)
-		// Delete an event
-		axios.delete(`http://localhost:3000/api/events/${id}`)
-			.then(
-				() =>
-					setEvents(events.filter(event => event._id !== id)))
-			.catch(error => console.error(error));
-	};
+if (!events) return;
 
-  const handleEditEvent =  (id, updatedTitle, updatedDate) => {
-    // Update event by ID
-    axios
-        .put(`http://localhost:3000/api/events/${id}`, {
-            title: updatedTitle,
-            date: updatedDate,
-        })
-        .then((response) => {
-            const updatedEvent = events.map((event) =>
-                event._id === id ? response.data : event
-            );
-            setEvents(updatedEvent);
-        })
-        .catch((error) => console.error("Error updating note:", error));
-};
-
-const handleEventAdd = (newEvent) => {
-  setEvents([...events, newEvent]);
-};
+  if (events.length === 0) return <h1> No events Found</h1>;
 
   return (
-    
-
+  
       <div className='flex'>
-      
-
-        
-
       <div className="flex flex-wrap  justify-center">
-      
-      
+      <h1 className="text-bold text-white text-3xl">All Events</h1>
 
-      {events.map(event => (
-      <div className="card card-border bg-sky-950 basis-xs m-2" key={event._id}>
-        <h2 className='mx-5'>Event Name :  {event.title}</h2>
+      {events.map((event) => {
+        const { _id, imageUrl,title, date, description, location } =
+          event;
+
+          return  (
+      <div className="card card-border bg-sky-950 basis-xs m-2" key={_id}>
+        <div>
+              <img
+                alt="photo"
+                className="w-20 h-20 rounded-full object-cover"
+                src={imageUrl}
+              />
+            </div>
+            <h2 className='mx-5'>Event Title :  {title}</h2>
+        <h2 className='mx-5'>Event description :  {description}</h2>
         
-        <p className='mx-5'>Event On : {new Date(event.date).toLocaleDateString()}</p>
-        <p className='mx-5'>Event Time: {new Date(event.date).toLocaleTimeString()}</p>
-        <div className='flex flex-row'>
-        <button className="btn btn-xs w-20 p-5 m-5 btn-info" onClick={()=>handleEditEvent(
-          event._id,
-          prompt("Enter updated title:", event.title),
-          prompt("Enter updated date:", event.date)
-          
-          
-        )}>Edit</button>
-        <button className="btn btn-xs w-20 p-5 m-5 bg-pink-500" onClick={()=>handleEventDelete(event._id)}>Delete</button> </div>
+        
+        <p className='mx-5'>Event On : {new Date(date).toLocaleDateString()}</p>
+        <p className='mx-5'>Event Time: {new Date(date).toLocaleTimeString()}</p>
+        <h2 className='mx-5'>Event location :  {location}</h2>
+        
         
 
       </div>)
       
         
-      )}
+      })
+    }
       </div>
       </div>
       
-    )}
+    )
+  }
 
 
         

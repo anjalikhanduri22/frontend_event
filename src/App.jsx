@@ -9,42 +9,39 @@ import Login from "./components/Login";
 import ShowBookings from './components/ShowBookings';
 import ShowCustomers from './components/ShowCustomers';
 import EventCard from './components/EventCard';
-import Logout from './components/Logout';
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
+import EventListAdmin from "./components/EventListAdmin";
+import AllBookedEvents from './components/AllBookedEvents';
 
 const App = () => {
+  
 
   return (
     <>
     <Provider store={appStore}>
-      <BrowserRouter basename="/">
+      <BrowserRouter >
     <Routes>
        <Route path="/" element={<Login />} />
-       <Route path="/logout" element={<Logout />} />
+       <Route path="/login" element={<Login />} />
+       
 
       <Route path ="/admin" element={<AdminDashboard />}>
       <Route path ="/admin/addevent" element={<EventForm />}></Route>
-
-      <Route path ="/admin/showevents"  element ={<EventList />} />
-      <Route path ="/admin/showbookings" element ={<ShowBookings /> } />
+      <Route path ="/admin/allEvents" element={<EventListAdmin />}></Route>
+      <Route path ="/admin/showBookedEvents" element ={ <AllBookedEvents />} />
+      
       <Route path ="/admin/showcustomers" element ={ <ShowCustomers />} />
     
       </Route>
 
       <Route path ="/user" element={<UserDashboard />}>
-      <Route path="/user/events" element={<EventList />} />
+      <Route path="/user/events/all" element={<EventList />} />
       <Route path="/user/bookings" element={<ShowBookings />} />
       <Route path="/user/events/:targetEventId" element={<EventCard />} />
       
       </Route>
-      
-
-      
-
-      
-
-      
+    
     </Routes>
     </BrowserRouter>
     </Provider>

@@ -1,30 +1,40 @@
 import React,{ useState } from 'react';
 import axios from 'axios';
+import { addEvents } from '../utils/eventSlice';
+import { useDispatch, useSelector } from "react-redux";
 
-const EventForm = ({ onEventAdd }) => {
+const EventForm = () => {
+  const events = useSelector((store) => store.events);
+      const dispatch = useDispatch();
+  
 
   const[title,setTitle] = useState("");
   const[date,setDate] = useState("");
-  
+  const[description, setDescription] = useState("");
+  const [location,setLocation]= useState("");
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
   
       // Create a new event
-      axios.post('http://localhost:3000/api/events',
+      const res = await axios.post('http://localhost:3000/admin/event',
         {
           title,
-          date
-          
-
+          date,
+          description,
+          location,
+      },{
+        withCredentials: true,
       })
         .then(response => {
-          onEventAdd(response.data);
+          dispatch(addEvents(response.data.data));
           setTitle("");
           setDate("");
+          setDescription("");
+          setLocation("");
           
-          window.location.reload();
+          
         })
         .catch(error => console.error(error));
     };
@@ -43,6 +53,12 @@ const EventForm = ({ onEventAdd }) => {
 
   <legend className="fieldset-legend">Enter Event Date and Time</legend>
   <input type="datetime-local" className="input" value={date} onChange={(e)=>setDate(e.target.value)}  />
+
+  <legend className="fieldset-legend">Enter Description</legend>
+  <input type="text" className="input" value={description} onChange={(e)=>setDescription(e.target.value)}  />
+
+  <legend className="fieldset-legend">Enter location</legend>
+  <input type="text" className="input" value={location} onChange={(e)=>setLocation(e.target.value)}  />
 
   
  

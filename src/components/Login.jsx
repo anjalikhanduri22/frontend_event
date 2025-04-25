@@ -1,19 +1,17 @@
 import   { React , useState } from 'react';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
 
   const[email, setEmail]= useState("");
   const [password, setPassword] = useState("");
-
-  
   const[name, setName]= useState("");
-
   const[isLoginForm, setIsLoginForm] = useState(true);
 
-
-  const [error,setError] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async ()=>{
@@ -23,12 +21,15 @@ const Login = () => {
         password,
       },
     {withCredentials:true}
-  )
-  
+  );
+  dispatch(addUser(res.data));
+  console.log(res.data.user.role);
+  if(res.data.user.role == "Admin"){
+    return navigate("/admin");
+  }
   return navigate("/user");
-
     }catch(err){
-      setError(err?.response?.data || "something went wrong");
+      console.error(err);
       
     }
   }
@@ -36,8 +37,7 @@ const Login = () => {
   const handleSignUp = async ()=>{
     try{
       const res = await axios.post("http://localhost:3000/register",{name,email,password},{withCredentials:true});
-
-   
+      dispatch(addUser(res.data));
       return navigate("/user");
 
     }
@@ -95,7 +95,7 @@ const Login = () => {
             </div>
 
 
-<p className='text-red-500'>{ error }</p>
+
     <div className="card-actions justify-center">
       <button className="btn btn-primary mt-5" onClick={isLoginForm ? handleLogin :handleSignUp}>{isLoginForm ? "Login" : "SignUp"} </button>
     </div>
