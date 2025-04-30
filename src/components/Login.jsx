@@ -22,8 +22,12 @@ const Login = () => {
       },
     {withCredentials:true}
   );
-  dispatch(addUser(res.data));
-  console.log(res.data.user.role);
+  dispatch(addUser(res.data.user));
+
+  console.log(res.data.user);
+
+  console.log("login user:" ,res.data.user.name);
+  
   if(res.data.user.role == "Admin"){
     return navigate("/admin");
   }
@@ -37,7 +41,7 @@ const Login = () => {
   const handleSignUp = async ()=>{
     try{
       const res = await axios.post("http://localhost:3000/register",{name,email,password},{withCredentials:true});
-      dispatch(addUser(res.data));
+      dispatch(addUser(res.data.user));
       return navigate("/user");
 
     }

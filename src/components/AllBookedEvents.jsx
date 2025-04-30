@@ -16,6 +16,7 @@ const bookings = useSelector((store) => store.bookings);
           withCredentials: true,
         });
         dispatch(addBookings(res.data.data));
+        console.log(res.data.data);
   
       }catch (err) {
         // Handle Error Case

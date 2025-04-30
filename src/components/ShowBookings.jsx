@@ -31,10 +31,11 @@ const ShowBookings = () => {
   
     <div className='flex'>
     <div className="flex flex-wrap  justify-center">
-    <h1 className="text-bold text-white text-3xl">All Bookings</h1>
+    
     {Array.isArray(bookings) && bookings.length > 0 ? (
           bookings.map((booking) => {
-            const { _id, eventId, title, userId, date, location, status, registrationDate } = booking;
+            const { _id, eventId, status, registrationDate } = booking;
+            console.log(booking);
   
         return  (
     <div className="card card-border bg-sky-950 basis-xs m-2" key={_id}>
@@ -49,7 +50,7 @@ const ShowBookings = () => {
     
       
     })):(
-      <p className='text-white'>No bookings available.</p> // Display a message when no bookings are available.
+      <h1 className='text-white text-center text-3xl mx-90'>No bookings available.</h1> // Display a message when no bookings are available.
     )}
   
     </div>

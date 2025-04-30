@@ -45,17 +45,21 @@ const EventListAdmin = () => {
 
 //3....edit an event
 
-  const handleEditEvent =  async (_id) => {
+  const handleEditEvent =  async (_id, newTitle, newDate, newLocation, newDescription) => {
     try{
       const res = await axios.put("http://localhost:3000/" + _id, {
-          title,
-          date,
-          location,
-          description,
-      },{ withCredentials: true });
+        title: newTitle,
+        date: newDate,
+        location: newLocation,
+        description: newDescription,
+      },
+      { withCredentials: true });
       dispatch(addEvents(res?.data));
+      fetchEvents();
     }
-     catch(error) { console.error("Error updating note:", error)};
+     catch(error) { console.error("Error updating note:", error)
+      
+     };
 };
 
 
@@ -74,7 +78,8 @@ if (!events) return;
       <div className="flex flex-wrap  justify-center">
       
 
-      {events.map((event) => {
+      {Array.isArray(events) && events.length > 0 ?(
+      events.map((event) => {
         const { _id, imageUrl,title, date,  description,location } =
           event;
 
@@ -83,10 +88,11 @@ if (!events) return;
         <div>
               <img
                 alt="photo"
-                className="w-20 h-20 rounded-full object-cover"
+                className="w-80 h-50  object-cover"
                 src={imageUrl}
               />
             </div>
+            
         <h2 className='mx-5'>Event Title :  {title}</h2>
         <h2 className='mx-5'>Event description :  {description}</h2>
         
@@ -95,26 +101,24 @@ if (!events) return;
         <h2 className='mx-5'>Event location :  {location}</h2>
 
 
+
          
-        <div className='flex flex-row'>
-        <button className="btn btn-xs w-20 p-5 m-5 btn-info" onClick={()=>handleEditEvent(
-          event._id,
-          prompt("enter Title:", <input
-            type="text"
-            value={event.title}
-            className="input input-bordered w-full max-w-xs"
-            onChange={(e) => setTitle(e.target.value)}
-          />),
-          prompt("enter Date:", <input
-            type="text"
-            value={event.date}
-            className="input input-bordered w-full max-w-xs"
-            onChange={(e) => setDate(e.target.value)}
-          />),
-          
-          
-          
-        )}>Edit</button>
+        <div className="flex flex-row">
+    <button
+      className="btn btn-xs w-20 p-5 m-5 btn-info"
+      onClick={() => {
+        const newTitle = prompt("Enter Title:", event.title);
+        const newDate = prompt("Enter Date:", event.date);
+        const newLocation = prompt("Enter Location:", event.location);
+        const newDescription = prompt("Enter Description:", event.description);
+
+        if (newTitle && newDate && newLocation && newDescription) {
+          handleEditEvent(event._id, newTitle, newDate, newLocation, newDescription);
+        }
+      }}
+    >
+      Edit
+    </button>
 
         <button className="btn btn-xs w-20 p-5 m-5 bg-pink-500" onClick={()=>handleEventDelete(event._id)}>Delete</button> </div>
         
@@ -122,7 +126,9 @@ if (!events) return;
       </div>)
       
         
-      })
+      })):(
+        <h1 className='text-white text-center text-3xl mx-90'>no events</h1> // Display a message when no event requests are available.
+      )
     }
       </div>
       </div>

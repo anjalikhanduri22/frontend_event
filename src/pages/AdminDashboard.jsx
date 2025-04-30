@@ -32,10 +32,11 @@ const AdminDashboard = () => {
   <div className="flex-none">
     <ul className="menu menu-horizontal px-1">
             <li><Link to ="/admin/addevent">Add events</Link></li>
-            <li><Link to ="">View Pending Admin Request</Link></li>
-            <li><Link to ="">View Pending Event Request</Link></li>
+            <li><Link to ="/admin/showRequests">View Pending Admin Request</Link></li>
+            <li><Link to ="/admin/showEventRequest">View Pending Event Request</Link></li>
             <li><Link to ="/admin/allEvents">All Events</Link></li>
             <li><Link to ="/admin/showBookedEvents">Show All Bookings</Link></li>
+            
             <li><Link to ="/admin/showcustomers">view All Users</Link></li>
             <li><a onClick={handleLogout}>Logout</a></li>
           </ul> 

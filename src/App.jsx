@@ -8,11 +8,13 @@ import EventList from './components/EventList';
 import Login from "./components/Login";
 import ShowBookings from './components/ShowBookings';
 import ShowCustomers from './components/ShowCustomers';
-import EventCard from './components/EventCard';
+
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
 import EventListAdmin from "./components/EventListAdmin";
 import AllBookedEvents from './components/AllBookedEvents';
+import HandleEventRequest from './components/HandleEventRequest';
+import HandleAdminRequest from './components/HandleAdminRequest';
 
 const App = () => {
   
@@ -30,7 +32,8 @@ const App = () => {
       <Route path ="/admin/addevent" element={<EventForm />}></Route>
       <Route path ="/admin/allEvents" element={<EventListAdmin />}></Route>
       <Route path ="/admin/showBookedEvents" element ={ <AllBookedEvents />} />
-      
+      <Route path ="/admin/showEventRequest" element ={ <HandleEventRequest />} />
+      <Route path ="/admin/showRequests" element ={ <HandleAdminRequest />} />
       <Route path ="/admin/showcustomers" element ={ <ShowCustomers />} />
     
       </Route>
@@ -38,7 +41,7 @@ const App = () => {
       <Route path ="/user" element={<UserDashboard />}>
       <Route path="/user/events/all" element={<EventList />} />
       <Route path="/user/bookings" element={<ShowBookings />} />
-      <Route path="/user/events/:targetEventId" element={<EventCard />} />
+      
       
       </Route>
     

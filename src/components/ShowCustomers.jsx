@@ -26,9 +26,7 @@ const ShowCustomers = () => {
     fetchUsers();
     }, []);
 
-    if (!users) return;
-
-  if (users.length === 0) return <h1> No users Found</h1>;
+    
 
 
 
@@ -49,7 +47,8 @@ const ShowCustomers = () => {
     </thead>
   
     <tbody>
-    {users.map((user) => (
+    {Array.isArray(users) && users.length > 0 ? 
+    (users.map((user) => (
         
      
         <tr key={user._id}>
@@ -58,7 +57,13 @@ const ShowCustomers = () => {
         <td>{user.email}</td>
         <td>{user.role}</td>
       </tr>
-    ))}
+    ))
+  ):(
+    <tr>
+          <td colSpan="4">No users found.</td>
+        </tr>
+
+  )}
     </tbody>
     </table>
     </div>
